@@ -28,7 +28,7 @@ function initApp(){
         // Save the empty array to local storage
         SaveData(myData);
         // Build the loader
-        setTimeout(function(){ BuildLanding()},3000);
+        setTimeout(function(){BuildProfileView()},3000);
        
     }else{
         // If data is found, continue with the data
@@ -112,8 +112,23 @@ function BuildProfileView(){
     // Build the profile view
     console.log("Profile view built");
     ClearMain();
-    myMain.innerHTML=`<div class="profileView"><h2>Profil</h2><p>Her kan du ændre dine oplysninger.</p></div>`; // Add the profile view to the main content
+    myMain.innerHTML=`<section class="profileView"><h2>Profil</h2><p>Her kan du ændre dine oplysninger.</p> <label for="nameInput">dit navn:</label>
+    <input type="text" id="profileNameInput" name="nameInput" placeholder="indtast navn"><button onclick="ProfileCallBack('ok')">ok</button><button onclick="ProfileCallBack('cancel')">cancel</button></section>`; // Add the profile view to the main content
 }
+
+function ProfileCallBack(myAnswer){
+    if (myAnswer=="ok") {
+        myData.Profile.name=document.getElementById('profileNameInput').value
+        // Save the empty array to local storage
+        SaveData(myData);
+
+        BuildLanding()
+    } else {
+        BuildLanding()
+    }
+
+}
+
 
 function BuildListView(){
     // Build the footer
