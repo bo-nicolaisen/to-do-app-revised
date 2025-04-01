@@ -1,5 +1,6 @@
 let myData=null; // Declare myData variable globally
 const myMain = document.getElementById('mainContent'); // Select the main element
+let myState="firstrun"
 
 initApp(); // Call the initApp function to initialize the app
 
@@ -28,6 +29,7 @@ function initApp(){
         // Save the empty array to local storage
         SaveData(myData);
         // Build the loader
+        myState="firstrun"
         setTimeout(function(){BuildProfileView()},3000);
        
     }else{
@@ -50,25 +52,27 @@ function ConnectInterface(){
     // connect event listeners
 
      myNewButton.addEventListener('click', function() {
-        console.log("New button clicked");
-        // Add code to handle new button click
+       
+        FooterCallback("new")
+       
     }
     );
 
       
     myDeleteButton.addEventListener('click', function() {
-        console.log("Delete button clicked");
-        // Add code to handle delete button click
+       
+        FooterCallback("delete")
+       
     }   
     );
     myHomeButton.addEventListener('click', function() {
-        console.log("Home button clicked");
-        // Add code to handle home button click
+        FooterCallback("home");
     }
     );
     myProfileButton.addEventListener('click', function() {
-        console.log("Profile button clicked");
         // Add code to handle profile button click
+        FooterCallback("profile")
+     
     }
     );
 
@@ -81,6 +85,7 @@ function ConnectInterface(){
 
 function BuildLanding(){
     ClearMain(); // Remove the loader before building the landing page
+    myState="listview"
     // Build the header
     console.log(myData);
 
@@ -112,8 +117,33 @@ function BuildProfileView(){
     // Build the profile view
     console.log("Profile view built");
     ClearMain();
-    myMain.innerHTML=`<section class="profileView"><h2>Profil</h2><p>Her kan du ændre dine oplysninger.</p> <label for="nameInput">dit navn:</label>
-    <input type="text" id="profileNameInput" name="nameInput" placeholder="indtast navn"><button onclick="ProfileCallBack('ok')">ok</button><button onclick="ProfileCallBack('cancel')">cancel</button></section>`; // Add the profile view to the main content
+    if (myState=="firstrun") {
+         myMain.innerHTML=`<section class="profileView"><h2>Profil</h2><p>Her kan du ændre dine oplysninger.</p> <label for="nameInput">dit navn:</label>
+    <input type="text" id="profileNameInput" name="nameInput" placeholder="indtast navn"><button onclick="ProfileCallBack('ok')">ok</button></section>`;   
+    } else {
+        myMain.innerHTML=`<section class="profileView"><h2>Profil</h2><p>Her kan du ændre dine oplysninger.</p> <label for="nameInput">dit navn:</label>
+        <input type="text" id="profileNameInput" name="nameInput" placeholder="indtast navn"><button onclick="ProfileCallBack('ok')">ok</button><button onclick="ProfileCallBack('cancel')">cancel</button></section>`;
+        
+    }
+ // Add the profile view to the main content
+}
+
+function FooterCallback(myAnswer){
+    // Handle footer button clicks
+    console.log("Footer callback: " + myAnswer);
+    if (myAnswer=="new") {
+      
+       
+    } else if (myAnswer=="delete") {
+        console.log("Delete button clicked");
+        // Add code to handle delete button click
+    } else if (myAnswer=="home") {
+        BuildLanding()
+    } else if (myAnswer=="profile") {
+        BuildProfileView()
+    } else {
+        console.log("Unknown footer button clicked");
+    }
 }
 
 function ProfileCallBack(myAnswer){
