@@ -80,7 +80,7 @@ function ConnectInterface(){
 }
 
 function BuildLanding(){
-    RemoveLoader(); // Remove the loader before building the landing page
+    ClearMain(); // Remove the loader before building the landing page
     // Build the header
     console.log(myData);
 
@@ -96,7 +96,7 @@ function BuildLanding(){
     }else{
         // If todos are found, build the main content
         myTodos.forEach((list,index) => {
-            myMain.innerHTML+=`<div class="todoList" onclick="ListCallBack(${index})"><h2>${list.name}</h2><p>${list.description}</p></div>`; // Add the todos to the main content
+            myMain.innerHTML+=`<div class="todoList" onclick="ListViewCallBack(${index})"><h2>${list.name}</h2><p>${list.description}</p></div>`; // Add the todos to the main content
         });
     }
  
@@ -111,7 +111,8 @@ function BuildLanding(){
 function BuildProfileView(){
     // Build the profile view
     console.log("Profile view built");
-    // Add any other profile view building code here
+    ClearMain();
+    myMain.innerHTML=`<div class="profileView"><h2>Profil</h2><p>Her kan du ændre dine oplysninger.</p></div>`; // Add the profile view to the main content
 }
 
 function BuildListView(){
@@ -133,7 +134,7 @@ function BuildLoader(){
     // Add any other loader building code here
 }  
 
-function RemoveLoader(){
+function ClearMain(){
     // Remove the loader
     console.log("Loader removed");
     // Add any other loader removal code here
