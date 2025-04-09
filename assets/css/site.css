@@ -3,19 +3,25 @@ body {
     margin: 0px;
     padding: 0px;
     font-family: 'Arial', sans-serif;
-    font-size: 16px;
     display: flex;
     flex-direction: column;
- 
     align-items: center;
 }
 
+h1 h2 h3 h4 h5 h6 {
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+}
+
+
+
 footer {
     position: fixed;
-width: 95%;
+    width: 95%;
     background-color: rgb(255, 255, 255);
+    border-top: #000000 solid 1px;
     bottom: 0px;
-   
     margin-bottom: 0px;
     padding-top: 12px;
     padding-bottom: 16px;
@@ -23,35 +29,70 @@ width: 95%;
     display: flex;
     flex-direction: row;
     justify-content: space-around;
-    align-items: center;    
+    align-items: center;
 
 }
-main {
+
+
+#mainContent {
     width: 100%;
-    background-color: rgb(243, 231, 163);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0px;
     margin-left: 8px;
     margin-right: 8px;
     margin-top: 8px;
     margin-bottom: 16px;
-    display: flex;
-    flex-direction: column;
+
+
+
 }
 
 
 .loader {
     width: 60px;
     aspect-ratio: 2;
-    --_g: no-repeat radial-gradient(circle closest-side,#000 90%,#0000);
-    background: 
-      var(--_g) 0%   50%,
-      var(--_g) 50%  50%,
-      var(--_g) 100% 50%;
+    --_g: no-repeat radial-gradient(circle closest-side, #000 90%, #0000);
+    background:
+        var(--_g) 0% 50%,
+        var(--_g) 50% 50%,
+        var(--_g) 100% 50%;
     background-size: calc(100%/3) 50%;
     animation: l3 1s infinite linear;
-  }
-  @keyframes l3 {
-      20%{background-position:0%   0%, 50%  50%,100%  50%}
-      40%{background-position:0% 100%, 50%   0%,100%  50%}
-      60%{background-position:0%  50%, 50% 100%,100%   0%}
-      80%{background-position:0%  50%, 50%  50%,100% 100%}
-  }
+}
+
+@keyframes l3 {
+    20% {
+        background-position: 0% 0%, 50% 50%, 100% 50%
+    }
+
+    40% {
+        background-position: 0% 100%, 50% 0%, 100% 50%
+    }
+
+    60% {
+        background-position: 0% 50%, 50% 100%, 100% 0%
+    }
+
+    80% {
+        background-position: 0% 50%, 50% 50%, 100% 100%
+    }
+}
+
+.todoListItem {
+
+    padding-left: 8px;
+    margin: 4px 0px;
+    background-color: rgb(255, 255, 255);
+    border: #000000 solid 1px;
+    border-radius: 8px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 1);
+    width: 90%;
+}
+
+.todoListItem:hover {
+    background-color: rgb(240, 240, 240);
+    cursor: pointer;
+}
