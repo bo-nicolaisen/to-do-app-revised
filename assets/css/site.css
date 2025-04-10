@@ -315,3 +315,101 @@ footer {
     width: 64px;
     height: 64px;
 }
+
+/* edit overlays --------------------------------------------- */
+.newItemView {
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    padding: 8px;
+
+    box-sizing: border-box;
+
+    border-top: #000000 solid 1px;
+
+}
+
+.newItemView h2 {
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+}
+.newItemView p {
+    margin: 0px;
+    margin-bottom: 16px;
+    padding: 0px;
+    box-sizing: border-box;
+}
+
+
+/* #profileButtons {
+   
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+   
+    color: rgb(255, 255, 255);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin: 8px;
+
+    padding-left: 16px;
+    padding-right: 16px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+
+    margin: 0px;
+    box-sizing: border-box;
+} */
+
+
+.deleteOverlay {
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    padding: 8px;
+
+    box-sizing: border-box;
+
+    border-top: #000000 solid 1px;
+
+}
+
+.deleteOverlay h2 {
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+}
+.deleteOverlay p {
+    margin: 0px;
+    margin-bottom: 16px;
+    padding: 0px;
+    box-sizing: border-box;
+}
+
+
+/* #profileButtons {
+   
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+   
+    color: rgb(255, 255, 255);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin: 8px;
+
+    padding-left: 16px;
+    padding-right: 16px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+
+    margin: 0px;
+    box-sizing: border-box;
+} */
