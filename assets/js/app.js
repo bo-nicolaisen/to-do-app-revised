@@ -96,16 +96,7 @@ function BuildLanding(){
 
     let myTodos=myData.lists; // Get the todos from the data
 
-    if(myTodos.length==0){
-        // If no todos are found, build the empty state
-        myMain.innerHTML=`<div class="emptyState"><h2>Ingen todo lists</h2><p>Du har ingen todo lister endnu. Klik på knappen for at tilføje en ny liste.</p></div>`; // Add the empty state to the main content
-    }else{
-        // If todos are found, build the main content
-        myTodos.forEach((list,index) => {
-
-            myMain.innerHTML+=`<div class="todoListItem" onclick="ListViewCallBack(${index})"><h3>${list.name}</h3><p>${list.description}</p>${ ProgressSVG(list.state)}</div>`; // Add the todos to the main content
-        });
-    }
+   buildListView(myTodos); // Build the list view with the todos
  
 
      console.log("Main content built");
@@ -113,6 +104,38 @@ function BuildLanding(){
     
    
 
+}
+
+function buildListView(myTodos){
+    if(myTodos.length==0){
+        // If no todos are found, build the empty state
+        myMain.innerHTML=`<div class="emptyState"><h2>Ingen todo lists</h2><p>Du har ingen todo lister endnu. Klik på knappen for at tilføje en ny liste.</p></div>`; // Add the empty state to the main content
+    }else{
+        // If todos are found, build the main content
+        myTodos.forEach((list,index) => {
+
+           
+
+            let myListElement=document.createElement('div'); // Create a new div element for the list
+            myListElement.classList.add('todoListItem'); // Add the todoListItem class to the div element
+            myListElement.innerHTML=`<h3>${list.name}</h3><p>${list.description}</p>${ ProgressSVG(list.state)}</div>`; // Set the inner HTML of the div element to the list name and description
+            myListElement.addEventListener('click', function() {
+                ListViewCallBack(index); // Call the ListViewCallBack function with the index of the list
+            });
+            let myDeleteButton=document.createElement('button'); // Create a new button element for the delete button
+            myDeleteButton.classList.add('deleteButton'); // Add the deleteButton class to the button element
+            myDeleteButton.innerHTML=`<img src="assets/img/delete.svg" alt="delete">`; // Set the inner HTML of the button element to the delete icon
+            myDeleteButton.addEventListener('click', function(event) {
+                event.stopPropagation(); // Stop the click event from propagating to the parent element
+                buildDeleteListOverlay(event,index); // Call the buildDeleteListOverlay function with the index of the list
+            });
+            myListElement.appendChild(myDeleteButton); // Append the delete button to the list element
+
+            myMain.appendChild(myListElement); // Append the div element to the main content
+
+            
+        });
+    }
 }
 
 
@@ -175,8 +198,8 @@ function BuildItemView(index){
     ClearMain(); 
     myState="itemView"
     console.log("build item view: " + index);
-    myData.lists[currentList].items.forEach((item) => {
-        myMain.innerHTML+=`<div class="todoListItem"><h3>${item.name}</h3><p>${item.description}</p>${ ProgressSVG(item.state)}</div>`; // Add the todos to the main content
+    myData.lists[currentList].items.forEach((item,index) => {
+        myMain.innerHTML+=`<div class="todoListItem"><h3>${item.name}</h3><p>${item.description}</p><button onclick="buildItemDeleteOverlay(${index})">delete</button></div>`; // Add the todos to the main content
     }); // Add the todos to the main content 
     // Add any other footer building code here
 }
@@ -206,12 +229,12 @@ console.log(myState);
         case "itemView":
             myMain.innerHTML=`<section class="newItemView"><h2>ny toDo</h2><p>giv dit item lidt liv.</p> <label for="nameInput">navn:</label>
             <input type="text" id="itemName" name="nameInput" placeholder="indtast beskrivelse"><label for="descriptionInput">navn:</label>
-            <input type="text" id="itemDescriptionInput" name="nameInput" placeholder="beskrivelse"><button onclick="newItem('ok')">ok</button><button onclick="BuildItemView(${currentList})">cancel</button></section>`;
+            <input type="text" id="itemDescriptionInput" name="nameInput" placeholder="beskrivelse"><button onclick="newItem('ok')">ok</button><button class="cancelButton" onclick="BuildItemView(${currentList})">cancel</button></section>`;
             break;
             case "listview":
                 myMain.innerHTML=`<section class="newListView"><h2>ny liste</h2><p>giv din liste liv.</p> <label for="nameInput">navn:</label>
             <input type="text" id="listName" name="nameInput" placeholder="indtast navn"><label for="descriptionInput">navn:</label>
-            <input type="text" id="itemDescriptionInput" name="nameInput" placeholder="beskrivelse"><button onclick="newList()">ok</button><button onclick="BuildLanding()">cancel</button></section>`;
+            <input type="text" id="listDescriptionInput" name="description" placeholder="beskrivelse"><button onclick="newList()">ok</button><button class="cancelButton" onclick="BuildLanding()">cancel</button></section>`;
             break;
       
         default:
@@ -224,24 +247,80 @@ console.log(myState);
 }
 
 function newList(){
+
+    // get data
+    let myName=document.getElementById('listName').value // Get the name from the input field
+    let myDescription=document.getElementById('listDescriptionInput').value // Get the description from the input field
+
     let teststate=  Math.floor(Math.random() * (100 - 20 + 1) + 20);
-    myData.lists.push({name:"Ny liste",description:"Beskrivelse",items:[],state:teststate}) // Add a new list to the data
+    myData.lists.push({name:myName,description:myDescription,items:[],state:teststate}) // Add a new list to the data
     SaveData(myData); // Save the data to local storage
     BuildLanding(); // Build the landing page again
 }
 
-function newItem(myAnsver){
-    console.log("newItem: " + myAnsver);
-    
-if (myAnsver=="ok") {
-    myData.lists[currentList].items.push({name:"Ny item",description:"Beskrivelse",state:0}) // Add a new item to the first list in the data
+function buildDeleteListOverlay(event,index){
+console.log(event);
+
+    // Build the delete overlay 
+    console.log("Delete overlay built");
+    myMain.innerHTML=`<section class="deleteListView"><h2>Er du sikker på at du vil slette denne liste?</h2><p>${myData.lists[index].name}</p><button onclick="deleteList(${index})">Ja</button><button class="cancelButton" onclick="BuildLanding()">Nej</button></section>`; // Add the delete overlay to the main content
+}
+
+function deleteList(index){
+    myData.lists.splice(index,1); // Remove the list from the data using splice
     SaveData(myData); // Save the data to local storage
-    BuildItemView(    myData.lists[currentList].items.push({name:"Ny item",description:"Beskrivelse",state:0}) // Add a new item to the first list in the data
-)
+    BuildLanding(); // Build the landing page again
+}
+
+
+// items code -------------------------------------------------------------------------------
+function newItem(myAnsver){
+    // get data
+    let myName=document.getElementById('itemName').value // Get the name from the input field
+    let myDescription=document.getElementById('itemDescriptionInput').value // Get the description from the input field
+    
+    // error checking
+    if (myName.length==0) {
+        alert("Du skal indtaste et navn") // Show an alert if the name is empty
+        return; // Exit the function
+    } else if (myDescription.length==0) {
+        alert("Du skal indtaste en beskrivelse") // Show an alert if the description is empty
+        return; // Exit the function
+    } else if (myAnsver=="cancel") {
+        BuildItemView(currentList) // Build the item view again if the user cancels
+        return; // Exit the function
+    } else if (myAnsver=="ok") {
+
+    myData.lists[currentList].items.push({name:myName,description:myDescription,state:0}) // Add a new item to the first list in the data
+    SaveData(myData); // Save the data to local storage
+    BuildItemView() // Add a new item to the first list in the data
      // Build the landing page again
 }
 
 }
+
+function buildItemDeleteOverlay(index){
+    // Build the delete overlay
+    console.log("Delete overlay built");
+    myMain.innerHTML=`<section class="deleteItemView"><h2>Er du sikker på at du vil slette dette item?</h2><p>${myData.lists[currentList].items[index].name}</p><button onclick="deleteItemCallback(true,${index})">Ja</button><button class="cancelButton" onclick="deleteItemCallback(false,${index})">Nej</button></section>`; // Add the delete overlay to the main content
+}
+
+function deleteItemCallback(myDeleteAction,index){
+    if(myDeleteAction){
+    // Handle delete item callback
+    console.log("Delete item callback: " + index);
+    // Add code to handle delete item callback
+    myData.lists[currentList].items.splice(index,1); // Remove the item from the list using splice
+SaveData(myData); // Save the data to local storage
+ // Build the item view again
+
+    console.log("Item deleted: " + index);
+    }else{
+        console.log("Item delete cancelled: " + index);
+    }
+    BuildItemView(currentList);
+}
+
 
 
 // service functions
