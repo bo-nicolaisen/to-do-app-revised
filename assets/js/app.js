@@ -14,11 +14,7 @@ function initApp(){
     // Add any other initialization code here
     BuildLoader();
 
-  
-
     myData=ReadData();
-
-
     if(myData==null){
         // If no data is found, create an empty array
         myData={
@@ -115,16 +111,17 @@ function buildListView(myTodos){
         myTodos.forEach((list,index) => {
 
            
-
             let myListElement=document.createElement('div'); // Create a new div element for the list
             myListElement.classList.add('todoListItem'); // Add the todoListItem class to the div element
             myListElement.innerHTML=`<h3>${list.name}</h3><p>${list.description}</p>${ ProgressSVG(list.state)}</div>`; // Set the inner HTML of the div element to the list name and description
             myListElement.addEventListener('click', function() {
                 ListViewCallBack(index); // Call the ListViewCallBack function with the index of the list
             });
-            let myDeleteButton=document.createElement('button'); // Create a new button element for the delete button
-            myDeleteButton.classList.add('deleteButton'); // Add the deleteButton class to the button element
-            myDeleteButton.innerHTML=`<img src="assets/img/delete.svg" alt="delete">`; // Set the inner HTML of the button element to the delete icon
+
+
+            let myDeleteButton=document.createElement('img'); // Create a new button element for the delete button
+            myDeleteButton.classList.add('deleteIcon'); // Add the deleteButton class to the button element
+            myDeleteButton.src="assets/img/delete.svg"; // Set the inner HTML of the button element to the delete icon
             myDeleteButton.addEventListener('click', function(event) {
                 event.stopPropagation(); // Stop the click event from propagating to the parent element
                 buildDeleteListOverlay(event,index); // Call the buildDeleteListOverlay function with the index of the list
@@ -323,7 +320,7 @@ SaveData(myData); // Save the data to local storage
 
 
 
-// service functions
+// service functions --------------------------------------------------------------------------
 function BuildLoader(){
     // Build the loader
     console.log("Loader built");
@@ -354,17 +351,21 @@ function ReadData() {
 }
 
 
+// Progress SVG function to create a circular progress bar
+// This function takes a percentage value and returns an SVG string representing the progress bar
 function ProgressSVG(percentage){
 let myPercentage=100.0-percentage; // Calculate the percentage to be displayed
-    let base=565.48*0.01
-let offset=myPercentage*base; // Initialize offset variable
+    let base=565.48*0.01    // Calculate the base value for the stroke-dasharray
+let offset=base*myPercentage; // Initialize offset variable
 
 let mySvg=`<svg width="100" height="100" viewBox="-25 -25 250 250" version="1.1" xmlns="http://www.w3.org/2000/svg" style="transform:rotate(-90deg)">
     <circle r="90" cx="100" cy="100" fill="transparent" stroke="#e0e0e0" stroke-width="16px"></circle>
     <circle r="90" cx="100" cy="100" stroke="#76e5b1" stroke-width="16px" stroke-linecap="round" stroke-dashoffset="${offset}px" fill="transparent" stroke-dasharray="565.48px"></circle>
-    <text x="73px" y="117px" fill="#6bdba7" font-size="52px" font-weight="bold" style="transform:rotate(90deg) translate(0px, -196px)">${percentage}</text>
+ <text x="73px" y="117px" dominant-baseline="middle" text-anchor="middle" fill="#6bdba7" font-size="52px" font-weight="bold" style="transform:rotate(90deg)  translate(40px, -210px)">${percentage}%</text>
+  
   </svg>`;
 return mySvg;
 }
 
+// <text x="73px" y="117px" fill="#6bdba7" font-size="52px" font-weight="bold" style="transform:rotate(90deg) translate(-20px, -180px)">${percentage}%</text>
 

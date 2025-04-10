@@ -1,3 +1,11 @@
+/*CSS color vars from color picker*/
+:root {
+ /*    --color-inProgress:#5593f3; */
+    --color-all:#ffc348;
+    --color-done:#52c2c3;
+    --color-inProgress:#f08928;
+    }
+
 body {
     background-color: rgb(255, 255, 255);
     margin: 0px;
@@ -6,6 +14,8 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
+    max-width: 600px;
+    margin: 0 auto;
 }
 
 h1 h2 h3 h4 h5 h6 {
@@ -13,6 +23,74 @@ h1 h2 h3 h4 h5 h6 {
     padding: 0px;
     box-sizing: border-box;
 }
+
+header{
+    width: 100%;
+    background-color: rgb(255, 255, 255);
+    padding: 8px;
+    box-sizing: border-box;
+
+}
+
+#headerTop{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding-left: 8px;
+    padding-right: 8px;
+}
+
+#headerInfo{
+    display: flex;
+    flex-direction: column;
+   
+}
+
+#headerInfo h2{
+margin: 0px;
+padding: 0px;
+box-sizing: border-box;
+}
+
+
+header button{
+    background-color: rgb(248, 123, 7);
+    color: rgb(255, 255, 255);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    padding-left: 16px;
+    padding-right: 16px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+
+    margin: 0px;
+    box-sizing: border-box;
+}
+
+
+
+#headerBottom{
+    margin-top: 32px;
+}
+
+#doneButton{
+    background-color:var(--color-done);
+    color: rgb(255, 255, 255);
+}
+
+#inProgressButton{
+    background-color: var(--color-inProgress);
+    color: rgb(255, 255, 255);
+}
+
+#allButton{
+    background-color: var(--color-all);
+    color: rgb(255, 255, 255);
+}
+
 
 
 
@@ -51,6 +129,7 @@ footer {
 }
 
 
+
 .loader {
     width: 60px;
     aspect-ratio: 2;
@@ -82,7 +161,10 @@ footer {
 }
 
 .todoListItem {
-
+display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: top;
     padding-left: 8px;
     margin: 4px 0px;
     background-color: rgb(255, 255, 255);
@@ -95,4 +177,32 @@ footer {
 .todoListItem:hover {
     background-color: rgb(240, 240, 240);
     cursor: pointer;
+}
+
+.deleteIcon{
+    width: 30px;
+    height: 30px;
+
+}
+#profileButton{
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 32px;
+    height: 32px;
+}
+
+#deleteButton{
+    width: 32px;
+    height: 32px;
+}
+
+#homeButton{
+    width: 32px;
+    height: 32px;
+}
+
+#newButton{
+    width: 64px;
+    height: 64px;
 }
