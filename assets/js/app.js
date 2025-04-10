@@ -113,7 +113,7 @@ function buildListView(myTodos){
            
             let myListElement=document.createElement('div'); // Create a new div element for the list
             myListElement.classList.add('todoListItem'); // Add the todoListItem class to the div element
-            myListElement.innerHTML=`<h3>${list.name}</h3><p>${list.description}</p>${ ProgressSVG(list.state)}</div>`; // Set the inner HTML of the div element to the list name and description
+            myListElement.innerHTML=`<section><h3>${list.name}</h3><p>${list.description}</p></section>${ ProgressSVG(list.state)}</div>`; // Set the inner HTML of the div element to the list name and description
             myListElement.addEventListener('click', function() {
                 ListViewCallBack(index); // Call the ListViewCallBack function with the index of the list
             });
