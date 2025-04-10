@@ -90,7 +90,13 @@ function BuildLanding(){
    let myProfileNameField=document.getElementById('nameField'); // Select the header element
     myProfileNameField.innerText=`Hej ${myName}` // Set the header content to the name
 
+    let myHeaderDescriptionElement=document.getElementById('headerDescription'); // Select the header element
+    myHeaderDescriptionElement.innerText=`Her kan du se alle dine lister`
+
+
     let myTodos=myData.lists; // Get the todos from the data
+
+    
 
    buildListView(myTodos); // Build the list view with the todos
  
@@ -113,11 +119,11 @@ function buildListView(myTodos){
            
             let myListElement=document.createElement('div'); // Create a new div element for the list
             myListElement.classList.add('todoListItem'); // Add the todoListItem class to the div element
-            myListElement.innerHTML=`<section><h3>${list.name}</h3><p>${list.description}</p></section>${ ProgressSVG(list.state)}</div>`; // Set the inner HTML of the div element to the list name and description
-            myListElement.addEventListener('click', function() {
-                ListViewCallBack(index); // Call the ListViewCallBack function with the index of the list
-            });
 
+            let myListDescriptionElement=document.createElement('section');
+
+
+            myListDescriptionElement.innerHTML=`<h3>${list.name}</h3><p>${list.description}</p>`; // Set the inner HTML of the div element to the list name and description
 
             let myDeleteButton=document.createElement('img'); // Create a new button element for the delete button
             myDeleteButton.classList.add('deleteIcon'); // Add the deleteButton class to the button element
@@ -126,7 +132,22 @@ function buildListView(myTodos){
                 event.stopPropagation(); // Stop the click event from propagating to the parent element
                 buildDeleteListOverlay(event,index); // Call the buildDeleteListOverlay function with the index of the list
             });
-            myListElement.appendChild(myDeleteButton); // Append the delete button to the list element
+
+            myListDescriptionElement.appendChild(myDeleteButton);
+
+            let myProgressElement=document.createElement('section')
+            myProgressElement.innerHTML=`${ ProgressSVG(list.state)}`
+
+
+            myListElement.appendChild(myListDescriptionElement)
+            myListElement.appendChild(myProgressElement)
+
+            myListElement.addEventListener('click', function() {
+                ListViewCallBack(index); // Call the ListViewCallBack function with the index of the list
+            });
+
+
+           // Append the delete button to the list element
 
             myMain.appendChild(myListElement); // Append the div element to the main content
 
@@ -141,11 +162,12 @@ function BuildProfileView(){
     console.log("Profile view built");
     ClearMain();
     if (myState=="firstrun") {
-         myMain.innerHTML=`<section class="profileView"><h2>Profil</h2><p>Her kan du ændre dine oplysninger.</p> <label for="nameInput">dit navn:</label>
-    <input type="text" id="profileNameInput" name="nameInput" placeholder="indtast navn"><button onclick="ProfileCallBack('ok')">ok</button></section>`;   
+         myMain.innerHTML=`<section class="profileView"><h2>Profil</h2><p>Skriv dit navn for at fortsætte..</p> <label for="nameInput">dit navn:</label>
+    <input type="text" id="profileNameInput" name="nameInput" placeholder="indtast navn">
+    <section id="profileButtons"><button onclick="ProfileCallBack('ok')">ok</button></section></section>`;   
     } else {
         myMain.innerHTML=`<section class="profileView"><h2>Profil</h2><p>Her kan du ændre dine oplysninger.</p> <label for="nameInput">dit navn:</label>
-        <input type="text" id="profileNameInput" name="nameInput" placeholder="indtast navn"><button onclick="ProfileCallBack('ok')">ok</button><button onclick="ProfileCallBack('cancel')">cancel</button></section>`;
+        <input type="text" id="profileNameInput" name="nameInput" placeholder="indtast navn"><section id="profileButtons"><button class="okButton" onclick="ProfileCallBack('ok')">ok</button><button class="cancelButton" onclick="ProfileCallBack('cancel')">cancel</button></section></section>`;
         
     }
  // Add the profile view to the main content
@@ -201,20 +223,7 @@ function BuildItemView(index){
     // Add any other footer building code here
 }
 
-function BuildProfileView(){
-    // Build the profile view
-    console.log("Profile view built");
-    ClearMain();
-    if (myState=="firstrun") {
-         myMain.innerHTML=`<section class="profileView"><h2>Profil</h2><p>Her kan du ændre dine oplysninger.</p> <label for="nameInput">dit navn:</label>
-    <input type="text" id="profileNameInput" name="nameInput" placeholder="indtast navn"><button onclick="ProfileCallBack('ok')">ok</button></section>`;   
-    } else {
-        myMain.innerHTML=`<section class="profileView"><h2>Profil</h2><p>Her kan du ændre dine oplysninger.</p> <label for="nameInput">dit navn:</label>
-        <input type="text" id="profileNameInput" name="nameInput" placeholder="indtast navn"><button onclick="ProfileCallBack('ok')">ok</button><button onclick="ProfileCallBack('cancel')">cancel</button></section>`;
-        
-    }
- // Add the profile view to the main content
-}
+
 
 function BuildnewOverlay(){
 

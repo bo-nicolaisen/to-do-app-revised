@@ -1,10 +1,12 @@
 /*CSS color vars from color picker*/
 :root {
- /*    --color-inProgress:#5593f3; */
-    --color-all:#ffc348;
-    --color-done:#52c2c3;
-    --color-inProgress:#f08928;
-    }
+    /*    --color-inProgress:#5593f3; */
+    --color-all: #ffc348;
+    --color-done: #52c2c3;
+    --color-inProgress: #f08928;
+    --color-ok:  #52c37d;
+    --color-delete: #f34848;
+}
 
 body {
     background-color: rgb(255, 255, 255);
@@ -15,7 +17,7 @@ body {
     flex-direction: column;
     align-items: center;
     max-width: 600px;
-    margin: 0 auto;
+
 }
 
 h1 h2 h3 h4 h5 h6 {
@@ -24,7 +26,52 @@ h1 h2 h3 h4 h5 h6 {
     box-sizing: border-box;
 }
 
-header{
+p{
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+}
+
+input{
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    border: #000000 solid 1px;
+    box-sizing: border-box;
+    margin-bottom: 16px;
+}
+
+.okButton{
+    background-color: var(--color-ok);
+    color: rgb(255, 255, 255);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    padding-left: 32px;
+    padding-right: 32px;
+    padding-top: 16px;
+    padding-bottom: 16px;
+
+    margin: 8px;
+    box-sizing: border-box;
+}
+
+.cancelButton{
+    background-color: var(--color-delete);
+    color: rgb(255, 255, 255);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    padding-left: 32px;
+    padding-right: 32px;
+    padding-top: 16px;
+    padding-bottom: 16px;
+
+    margin: 8px;
+    box-sizing: border-box;
+}
+
+header {
     width: 100%;
     background-color: rgb(255, 255, 255);
     padding: 8px;
@@ -32,7 +79,7 @@ header{
 
 }
 
-#headerTop{
+#headerTop {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -42,20 +89,20 @@ header{
     padding-right: 8px;
 }
 
-#headerInfo{
+#headerInfo {
     display: flex;
     flex-direction: column;
-   
+
 }
 
-#headerInfo h2{
-margin: 0px;
-padding: 0px;
-box-sizing: border-box;
+#headerInfo h2 {
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
 }
 
 
-header button{
+header button {
     background-color: rgb(248, 123, 7);
     color: rgb(255, 255, 255);
     border: none;
@@ -72,21 +119,21 @@ header button{
 
 
 
-#headerBottom{
+#headerBottom {
     margin-top: 32px;
 }
 
-#doneButton{
-    background-color:var(--color-done);
+#doneButton {
+    background-color: var(--color-done);
     color: rgb(255, 255, 255);
 }
 
-#inProgressButton{
+#inProgressButton {
     background-color: var(--color-inProgress);
     color: rgb(255, 255, 255);
 }
 
-#allButton{
+#allButton {
     background-color: var(--color-all);
     color: rgb(255, 255, 255);
 }
@@ -100,7 +147,7 @@ footer {
     background-color: rgb(255, 255, 255);
     border-top: #000000 solid 1px;
     bottom: 0px;
-    margin-bottom: 0px;
+    margin-bottom: 12px;
     padding-top: 12px;
     padding-bottom: 16px;
     border-top: 1px black solid;
@@ -118,13 +165,11 @@ footer {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 0px;
+
     margin-left: 8px;
     margin-right: 8px;
     margin-top: 8px;
     margin-bottom: 16px;
-
-
 
 }
 
@@ -160,18 +205,69 @@ footer {
     }
 }
 
+.profileView {
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    padding: 8px;
+
+    box-sizing: border-box;
+
+    border-top: #000000 solid 1px;
+
+}
+
+.profileView h2 {
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+}
+.profileView p {
+    margin: 0px;
+    margin-bottom: 16px;
+    padding: 0px;
+    box-sizing: border-box;
+}
+
+
+#profileButtons {
+   
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+   
+    color: rgb(255, 255, 255);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin: 8px;
+
+    padding-left: 16px;
+    padding-right: 16px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+
+    margin: 0px;
+    box-sizing: border-box;
+}
+
+
+
+
 .todoListItem {
-display: flex;
+    width: 90%;
+    display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: top;
-    padding-left: 8px;
-    margin: 4px 0px;
+    padding: 8px;
     background-color: rgb(255, 255, 255);
     border: #000000 solid 1px;
     border-radius: 8px;
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 1);
-    width: 90%;
+
 }
 
 .todoListItem:hover {
@@ -179,12 +275,25 @@ display: flex;
     cursor: pointer;
 }
 
-.deleteIcon{
-    width: 30px;
-    height: 30px;
+.deleteIcon {
+    margin-top: 8px;
+    width: 32px;
+    height: 32px;
 
 }
-#profileButton{
+.todoListItem h3 {
+  
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+}
+.todoListItem p {
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+}
+
+#profileButton {
     position: absolute;
     top: 8px;
     right: 8px;
@@ -192,17 +301,17 @@ display: flex;
     height: 32px;
 }
 
-#deleteButton{
+#deleteButton {
     width: 32px;
     height: 32px;
 }
 
-#homeButton{
+#homeButton {
     width: 32px;
     height: 32px;
 }
 
-#newButton{
+#newButton {
     width: 64px;
     height: 64px;
 }
