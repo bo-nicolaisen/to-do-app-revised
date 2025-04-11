@@ -41,7 +41,7 @@ function ConnectInterface() {
   console.log("Interface connected");
 
   let myNewButton = document.getElementById("newButton"); // Select the new button
-  let myDeleteButton = document.getElementById("deleteButton"); // Select the delete button
+ // let myDeleteButton = document.getElementById("deleteButton"); // Select the delete button
   let myHomeButton = document.getElementById("homeButton"); // Select the home button
   let myProfileButton = document.getElementById("profileButton"); // Select the profile button
 
@@ -53,9 +53,9 @@ function ConnectInterface() {
     FooterCallback("new");
   });
 
-  myDeleteButton.addEventListener("click", function () {
+ /*  myDeleteButton.addEventListener("click", function () {
     FooterCallback("delete");
-  });
+  }); */
   myHomeButton.addEventListener("click", function () {
     FooterCallback("home");
   });
@@ -116,7 +116,7 @@ function buildListView(myTodos) {
       myListDescriptionElement.appendChild(myDeleteButton);
 
       let myProgressElement = document.createElement("section");
-      myProgressElement.innerHTML = `${ProgressSVG(list.state)}`;
+      myProgressElement.innerHTML = `${ProgressSVG(list.state)}`; // Set the inner HTML of the div element to the list name and description
 
       myListElement.appendChild(myListDescriptionElement);
       myListElement.appendChild(myProgressElement);
@@ -176,52 +176,18 @@ function ProfileCallBack(myAnswer) {
     myData.Profile.name = document.getElementById("profileNameInput").value;
     // Save the empty array to local storage
     SaveData(myData);
+  }
 
+  if (myState=="listview") {
     BuildLanding();
-  } else {
-    BuildLanding();
+  } else if(myState=="itemView") {
+    BuildItemView(currentList)
   }
 }
 
-function BuildItemView(index) {
-  // Build the footer
-  ClearMain();
-  myState = "itemView";
 
-  myData.lists[currentList].items.forEach((item, index) => {
-    // Create a new div element for the item
-    let myItemElement = document.createElement("div"); // Create a new div element for the item
-    myItemElement.classList.add("todoListItem"); // Add the todoListItem class to the div element
-    myItemElement.innerHTML = `<h3>${item.name}</h3><p>${item.description}</p>`; // Set the inner HTML of the div element to the item name and description
+   
 
-    // Create a new button element for the delete button
-    let myDeleteButton = document.createElement("img"); // Create a new button element for the delete button
-    myDeleteButton.classList.add("deleteIcon"); // Add the deleteButton class to the button element
-    myDeleteButton.src = "assets/img/delete.svg"; // Set the inner HTML of the button element to the delete icon
-    myDeleteButton.addEventListener("click", function (event) {
-      event.stopPropagation(); // Stop the click event from propagating to the parent element
-      buildItemDeleteOverlay(index); // Call the buildItemDeleteOverlay function with the index of the item
-    });
-    myItemElement.appendChild(myDeleteButton); // Append the delete button to the item element
-
-    // Create a new button element for the delete button
-    let myDoneButton = document.createElement("div"); // Create a new button element for the delete button
-    //myDoneButton.classList.add('deleteIcon'); // Add the deleteButton class to the button element
-    myDoneButton.innerHTML = `${doneIcon(1)}`;
-    console.log(myDoneButton.innerHtml);
-    // Set the inner HTML of the button element to the delete icon
-    myDoneButton.addEventListener("click", function (event) {
-      event.stopPropagation(); // Stop the click event from propagating to the parent element
-      //buildItemDeleteOverlay(index); // Call the buildItemDeleteOverlay function with the index of the item
-    });
-    myItemElement.appendChild(myDoneButton);
-
-    // Add the todos to the main content
-    myMain.appendChild(myItemElement); // Append the div element to the main content
-    //doneIcon(state)
-  }); // Add the todos to the main content
-  // Add any other footer building code here
-}
 
 function BuildnewOverlay() {
   console.log("newOverlay built");
@@ -252,12 +218,12 @@ function newList() {
   let myName = document.getElementById("listName").value; // Get the name from the input field
   let myDescription = document.getElementById("listDescriptionInput").value; // Get the description from the input field
 
-  let teststate = Math.floor(Math.random() * (100 - 20 + 1) + 20);
+ 
   myData.lists.push({
     name: myName,
     description: myDescription,
     items: [],
-    state: teststate,
+    state: 0,
   }); // Add a new list to the data
   SaveData(myData); // Save the data to local storage
   BuildLanding(); // Build the landing page again
@@ -278,6 +244,53 @@ function deleteList(index) {
 }
 
 // items code -------------------------------------------------------------------------------
+
+function BuildItemView(index) {
+  // Build the footer
+  ClearMain();
+  myState = "itemView";
+
+  myData.lists[currentList].items.forEach((item, index) => {
+    // Create a new div element for the item
+    let myItemElement = document.createElement("div"); // Create a new div element for the item
+    myItemElement.classList.add("todoListItem"); // Add the todoListItem class to the div element
+    myItemElement.innerHTML = `<h3>${item.name}</h3><p>${item.description}</p>`; // Set the inner HTML of the div element to the item name and description
+    myItemElement.addEventListener("click", function () {
+      buildItemEditView(index); // Call the buildItemEditView function with the index of the item
+    }   ); // Add a click event listener to the item element
+
+    // Create a new button element for the done button
+    let myDoneButton = document.createElement("div"); // Create a new button element for the delete button
+    //myDoneButton.classList.add('deleteIcon'); // Add the deleteButton class to the button element
+    myDoneButton.innerHTML = `${doneIcon(item.state)}`; // Set the inner HTML of the button element to the delete icon
+   
+    // Set the inner HTML of the button element to the delete icon
+    myDoneButton.addEventListener("click", function (event) {
+      event.stopPropagation(); // Stop the click event from propagating to 
+      
+      toggleItem(index)
+    });
+    myItemElement.appendChild(myDoneButton);
+
+    // Add the todos to the main content
+    myMain.appendChild(myItemElement); // Append the div element to the main content
+   
+  }); 
+
+}
+
+function toggleItem(index){
+   console.log("toggleItem: " + myData.lists[currentList].items[index].state);
+   if (myData.lists[currentList].items[index].state == 0) {
+    myData.lists[currentList].items[index].state = 1; // Set the state to 1 if it is currently 0    
+   }else{
+        myData.lists[currentList].items[index].state = 0; // Set the state to 0 if it is currently 1
+    }
+
+    myData.lists[currentList].state = calculatePercentDone(); // Calculate the percentage of done items
+   SaveData(myData); // Save the data to local storage
+   BuildItemView(currentList); // Build the item view again
+   } 
 function newItem(myAnsver) {
   // get data
   let myName = document.getElementById("itemName").value; // Get the name from the input field
@@ -299,6 +312,7 @@ function newItem(myAnsver) {
       description: myDescription,
       state: 0,
     }); // Add a new item to the first list in the data
+    myData.lists[currentList].state = calculatePercentDone(); // Calculate the percentage of done items
     SaveData(myData); // Save the data to local storage
     BuildItemView(); // Add a new item to the first list in the data
     // Build the landing page again
@@ -327,6 +341,16 @@ function deleteItemCallback(myDeleteAction, index) {
   BuildItemView(currentList);
 }
 
+function buildItemEditView(index) {
+    // Build the item edit view
+    console.log("Item edit view built");
+    ClearMain();
+    myState = "itemEditView";
+    myMain.innerHTML = `<section class="itemEditView"><h2>Rediger item</h2><p>Rediger dit item.</p> <label for="nameInput">navn:</label>
+    <input type="text" id="itemName" name="nameInput" placeholder="indtast navn"><label for="descriptionInput">navn:</label>    
+    <input type="text" id="itemDescriptionInput" name="nameInput" placeholder="beskrivelse"><button class="okButton" onclick="editItem('ok')">ok</button><button class="cancelButton" onclick="BuildItemView(${currentList})">cancel</button></section>`;
+    // Add the item edit view to the main content
+}
 // service functions --------------------------------------------------------------------------
 function BuildLoader() {
   // Build the loader
@@ -374,9 +398,21 @@ function ProgressSVG(percentage) {
 
 
 function doneIcon(state) {
-  if (state != 1) {
+  if (state) {
     return `<svg width="64" height="64" viewBox="0 0 24 24"  fill="none" xmlns="http://www.w3.org/2000/svg" ><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <circle cx="12" cy="12" r="8" fill="#52c2c3" fill-opacity="1"></circle> <path d="M8.5 11L10.7929 13.2929C11.1834 13.6834 11.8166 13.6834 12.2071 13.2929L19.5 6" stroke="#52c37d" stroke-width="1.2" stroke-linecap="round"></path> </g></svg>`;
   } else {
     return `<svg width="64" height="64" viewBox="0 0 24 24"  fill="none" xmlns="http://www.w3.org/2000/svg" ><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <circle cx="12" cy="12" r="8" fill="#daebed" fill-opacity="1"></circle> <path d="M8.5 11L10.7929 13.2929C11.1834 13.6834 11.8166 13.6834 12.2071 13.2929L19.5 6" stroke="#222222" stroke-width="1.2" stroke-linecap="round"></path> </g></svg>`;
   }
+}
+
+function calculatePercentDone(){
+    let myList = myData.lists[currentList]; // Get the current list from the data
+    let myItems = myList.items; // Get the items from the current list
+    console.log(myItems);
+    
+    let myDoneItems = myItems.filter((item) => item.state == 1); // Filter the items to get only the done items
+    let myPercentDone = (myDoneItems.length / myItems.length) * 100; // Calculate the percentage of done items
+    console.log('percentage done: '+myPercentDone);
+    
+    return Math.round(myPercentDone); // Return the rounded percentage value    
 }
