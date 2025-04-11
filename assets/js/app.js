@@ -186,9 +186,6 @@ function ProfileCallBack(myAnswer) {
 }
 
 
-   
-
-
 function BuildnewOverlay() {
   console.log("newOverlay built");
   console.log(myState);
@@ -394,8 +391,6 @@ function ProgressSVG(percentage) {
   </svg>`;
   return mySvg;
 }
-
-
 
 function doneIcon(state) {
   if (state) {
