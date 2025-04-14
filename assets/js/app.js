@@ -1,5 +1,8 @@
 let myData = null; // Declare myData variable globally
 const myMain = document.getElementById("mainContent"); // Select the main element
+
+ const completedColor=getComputedStyle(document.documentElement).getPropertyValue('--color-ok'); // Get the CSS variable for the completed color
+
 let myState = "firstrun";
 let currentList = 0; // Declare currentList variable globally
 const globalDebug = false; // Set globalDebug to true for debugging purposes
@@ -354,10 +357,10 @@ function buildItemEditView(index) {
     if (globalDebug) {console.log(myItem)};
 
     myState = "itemEditView";
-    myMain.innerHTML = `<section class="itemEditView"><h2>Rediger item</h2><p>Rediger dit item.</p> 
-    <label for="itemName">navn:</label> <!-- Fixed mismatch -->
-    <input type="text" id="itemName" name="nameInput"  value="${myItem.name}"><label for="descriptionInput">Description:</label>    
-    <label for="itemDescriptionInput">beskrivelse:</label> <!-- Fixed mismatch -->
+    myMain.innerHTML = `<section class="itemEditView"><h2>Rediger item</h2>
+    <label for="itemName">navn:</label> 
+    <input type="text" id="itemName" name="nameInput"  value="${myItem.name}">    
+    <label for="itemDescriptionInput">beskrivelse:</label> 
     <input type="text" id="itemDescriptionInput" name="descriptionInput" value="${myItem.description}"><button class="okButton" onclick="editItem(${index})">ok</button><button class="cancelButton" onclick="BuildItemView(${currentList})">cancel</button></section>`;
     // Add the item edit view to the main content
 }
@@ -408,8 +411,8 @@ function ProgressSVG(percentage) {
   let offset = base * myPercentage; // Initialize offset variable
   let mySvg = `<svg width="100" height="100" viewBox="-25 -25 250 250" version="1.1" xmlns="http://www.w3.org/2000/svg"">
   <circle r="90" cx="50%" cy="50%" fill="transparent" stroke="#e0e0e0" stroke-width="16px"></circle>
-  <circle r="90" cx="50%" cy="50%" stroke="#76e5b1" stroke-width="16px" stroke-linecap="round" stroke-dashoffset="${offset}px" fill="transparent" stroke-dasharray="565.48px" style="transform-box: fill-box; transform-origin: center; transform: rotate(-90deg);" ></circle>
-<text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#6bdba7" font-size="52px" font-weight="bold">${percentage}%</text>
+  <circle r="90" cx="50%" cy="50%" stroke="${completedColor}" stroke-width="16px" stroke-linecap="round" stroke-dashoffset="${offset}px" fill="transparent" stroke-dasharray="565.48px" style="transform-box: fill-box; transform-origin: center; transform: rotate(-90deg);" ></circle>
+<text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="${completedColor}" font-size="52px" font-weight="bold">${percentage}%</text>
 
 </svg>`;
 
@@ -417,8 +420,9 @@ function ProgressSVG(percentage) {
 }
 
 function doneIcon(state) {
+ 
   if (state) {
-    return `<svg width="64" height="64" viewBox="0 0 24 24"  fill="none" xmlns="http://www.w3.org/2000/svg" ><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <circle cx="12" cy="12" r="8" fill="#daebed" fill-opacity="1"></circle> <path d="M8.5 11L10.7929 13.2929C11.1834 13.6834 11.8166 13.6834 12.2071 13.2929L19.5 6" stroke="#52c37d" stroke-width="2" stroke-linecap="round"></path> </g></svg>`;
+    return `<svg width="64" height="64" viewBox="0 0 24 24"  fill="none" xmlns="http://www.w3.org/2000/svg" ><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <circle cx="12" cy="12" r="8" fill="#daebed" fill-opacity="1"></circle> <path d="M8.5 11L10.7929 13.2929C11.1834 13.6834 11.8166 13.6834 12.2071 13.2929L19.5 6" stroke="${completedColor}" stroke-width="2" stroke-linecap="round"></path> </g></svg>`;
   } else {
     return `<svg width="64" height="64" viewBox="0 0 24 24"  fill="none" xmlns="http://www.w3.org/2000/svg" ><g id="SVGRepo_bgCarrier" stroke-width="1"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <circle cx="12" cy="12" r="8" fill="#daebed" fill-opacity="1"></circle> <path d="M8.5 11L10.7929 13.2929C11.1834 13.6834 11.8166 13.6834 12.2071 13.2929L19.5 6" stroke="#222222" stroke-width="1.2" stroke-linecap="round"></path> </g></svg>`;
   }
