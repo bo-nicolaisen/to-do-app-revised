@@ -342,12 +342,27 @@ function buildItemEditView(index) {
     // Build the item edit view
     console.log("Item edit view built");
     ClearMain();
+    let myItem=myData.lists[currentList].items[index]; // Get the item from the data using the index
+    console.log(myItem);
+
     myState = "itemEditView";
     myMain.innerHTML = `<section class="itemEditView"><h2>Rediger item</h2><p>Rediger dit item.</p> <label for="nameInput">navn:</label>
-    <input type="text" id="itemName" name="nameInput" placeholder="indtast navn"><label for="descriptionInput">navn:</label>    
-    <input type="text" id="itemDescriptionInput" name="nameInput" placeholder="beskrivelse"><button class="okButton" onclick="editItem('ok')">ok</button><button class="cancelButton" onclick="BuildItemView(${currentList})">cancel</button></section>`;
+    <input type="text" id="itemName" name="nameInput"  value="${myItem.name}"><label for="descriptionInput">navn:</label>    
+    <input type="text" id="itemDescriptionInput" name="itemDescriptionInput" value="${myItem.description}"><button class="okButton" onclick="editItem(${index})">ok</button><button class="cancelButton" onclick="BuildItemView(${currentList})">cancel</button></section>`;
     // Add the item edit view to the main content
 }
+
+function editItem(index) {
+  let myName= document.getElementById("itemName").value; // Get the name from the input field
+  let myDescription= document.getElementById("itemDescriptionInput").value; // Get the description from the input field
+
+myData.lists[currentList].items[index].name=myName; // Set the name of the item to the new name
+myData.lists[currentList].items[index].description=myDescription; // Set the description of the item to the new description
+  SaveData(myData); // Save the data to local storage
+  BuildItemView(currentList); // Build the item view again
+}
+
+
 // service functions --------------------------------------------------------------------------
 function BuildLoader() {
   // Build the loader
