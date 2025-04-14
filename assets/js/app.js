@@ -9,6 +9,9 @@ const globalDebug = false; // Set globalDebug to true for debugging purposes
 
 initApp(); // Call the initApp function to initialize the app
 
+/**
+ * Initializes the application by setting up the interface, loading data, and determining the initial state.
+ */
 function initApp() {
   // Initialize the app
   if (globalDebug) { console.log("App initialized"); }
@@ -41,6 +44,9 @@ function initApp() {
   }
 }
 
+/**
+ * Connects the user interface elements to their respective event listeners.
+ */
 function ConnectInterface() {
   if (globalDebug) { console.log("Interface connected"); }
 
@@ -74,6 +80,9 @@ function ConnectInterface() {
   });
 }
 
+/**
+ * Builds the landing page, displaying the user's lists and profile information.
+ */
 function BuildLanding() {
   ClearMain(); // Remove the loader before building the landing page
   myState = "listview";
@@ -93,6 +102,10 @@ function BuildLanding() {
   if (globalDebug) { console.log("Main content built"); }
 }
 
+/**
+ * Builds the list view, displaying all the user's to-do lists.
+ * @param {Array} myTodos - The array of to-do lists to display.
+ */
 function buildListView(myTodos) {
   if (myTodos.length == 0) {
     // If no todos are found, build the empty state
@@ -135,6 +148,9 @@ function buildListView(myTodos) {
   }
 }
 
+/**
+ * Builds the profile view, allowing the user to view or edit their profile information.
+ */
 function BuildProfileView() {
   if (globalDebug) { console.log("Profile view built"); }
   ClearMain();
@@ -150,15 +166,24 @@ function BuildProfileView() {
     <section id="profileButtons"><button class="okButton" onclick="ProfileCallBack('ok')">ok</button>
     <button class="cancelButton" onclick="ProfileCallBack('cancel')">cancel</button></section></section>`;
   }
-  // Add the profile view to the main content
+ 
 }
 
+
+/**
+ * Handles the callback when a list is selected from the list view.
+ * @param {number} myListIndex - The index of the selected list.
+ */
 function ListViewCallBack(myListIndex) {
   if (globalDebug) { console.log("List view callback: " + myListIndex); }
   currentList = myListIndex; // Set the current list index
   BuildItemView(myListIndex); // Build the item view for the selected list
 }
 
+/**
+ * Handles footer button clicks and navigates to the appropriate view.
+ * @param {string} myAnswer - The action triggered by the footer button.
+ */
 function FooterCallback(myAnswer) {
   if (globalDebug) { console.log("Footer callback: " + myAnswer); }
   if (myAnswer == "new") {
@@ -175,6 +200,10 @@ function FooterCallback(myAnswer) {
   }
 }
 
+/**
+ * Handles the callback for profile actions, such as saving or canceling changes.
+ * @param {string} myAnswer - The action triggered in the profile view.
+ */
 function ProfileCallBack(myAnswer) {
   if (globalDebug) { console.log("Profile callback: " + myAnswer); }
   if (myAnswer == "ok") {
@@ -190,7 +219,9 @@ function ProfileCallBack(myAnswer) {
   }
 }
 
-
+/**
+ * Builds the overlay for creating a new list or item, depending on the current state.
+ */
 function BuildnewOverlay() {
   if (globalDebug) { console.log("newOverlay built"); }
   if (globalDebug) { console.log(myState); }
@@ -198,7 +229,7 @@ function BuildnewOverlay() {
   ClearMain();
   switch (myState) {
     case "itemView":
-      myMain.innerHTML = `<section class="newItemView"><h2>ny toDo</h2><p>giv dit item lidt liv.</p> 
+      myMain.innerHTML = `<section class="overlayView"><h2>ny toDo</h2><p>giv dit item lidt liv.</p> 
       <label for="itemName">navn:</label> <!-- Fixed mismatch -->
       <input type="text" id="itemName" name="nameInput" placeholder="indtast beskrivelse">
       <label for="itemDescriptionInput">beskrivelse:</label> <!-- Fixed mismatch -->
@@ -207,7 +238,7 @@ function BuildnewOverlay() {
       <button class="cancelButton" onclick="BuildItemView(${currentList})">cancel</button></section>`;
       break;
     case "listview":
-      myMain.innerHTML = `<section class="newListView"><h2>ny liste</h2><p>giv din liste liv.</p> 
+      myMain.innerHTML = `<section class="overlayView"><h2>ny liste</h2><p>giv din liste liv.</p> 
       <label for="listName">navn:</label> <!-- Fixed mismatch -->
       <input type="text" id="listName" name="nameInput" placeholder="indtast navn">
       <label for="listDescriptionInput">beskrivelse:</label> <!-- Fixed mismatch -->
@@ -223,6 +254,9 @@ function BuildnewOverlay() {
   // Add the profile view to the main content
 }
 
+/**
+ * Creates a new to-do list and saves it to the data.
+ */
 function newList() {
   // get data
   let myName = document.getElementById("listName").value; // Get the name from the input field
@@ -239,13 +273,22 @@ function newList() {
   BuildLanding(); // Build the landing page again
 }
 
+/**
+ * Builds the overlay for confirming the deletion of a list.
+ * @param {Event} event - The event triggered by the delete button.
+ * @param {number} index - The index of the list to delete.
+ */
 function buildDeleteListOverlay(event, index) {
   if (globalDebug) { console.log(event); }
 
   if (globalDebug) { console.log("Delete overlay built"); }
-  myMain.innerHTML = `<section class="deleteOverlay"><h4>Er du sikker på at du vil slette?</h4><h2>${myData.lists[index].name}</h2><button class="okButton" onclick="deleteList(${index})">Ja</button><button class="cancelButton" onclick="BuildLanding()">Nej</button></section>`; // Add the delete overlay to the main content
+  myMain.innerHTML = `<section class="overlayView"><h4>Er du sikker på at du vil slette?</h4><h2>${myData.lists[index].name}</h2><button class="okButton" onclick="deleteList(${index})">Ja</button><button class="cancelButton" onclick="BuildLanding()">Nej</button></section>`; // Add the delete overlay to the main content
 }
 
+/**
+ * Deletes a to-do list and updates the data.
+ * @param {number} index - The index of the list to delete.
+ */
 function deleteList(index) {
   if (globalDebug) { console.log("List deleted: " + index); }
   myData.lists.splice(index, 1); // Remove the list from the data using splice
@@ -255,6 +298,10 @@ function deleteList(index) {
 
 // items code -------------------------------------------------------------------------------
 
+/**
+ * Builds the item view, displaying all items in the selected list.
+ * @param {number} index - The index of the selected list.
+ */
 function BuildItemView(index) {
   ClearMain();
   myState = "itemView";
@@ -288,6 +335,10 @@ function BuildItemView(index) {
 
 }
 
+/**
+ * Toggles the completion state of an item and updates the data.
+ * @param {number} index - The index of the item to toggle.
+ */
 function toggleItem(index){
   if (globalDebug) { console.log("toggleItem: " + myData.lists[currentList].items[index].state); }
    if (myData.lists[currentList].items[index].state == 0) {
@@ -300,6 +351,11 @@ function toggleItem(index){
    SaveData(myData); // Save the data to local storage
    BuildItemView(currentList); // Build the item view again
    } 
+
+/**
+ * Creates a new item in the current list and saves it to the data.
+ * @param {string} myAnsver - The action triggered in the new item overlay.
+ */
 function newItem(myAnsver) {
   // get data
   let myName = document.getElementById("itemName").value; // Get the name from the input field
@@ -328,11 +384,20 @@ function newItem(myAnsver) {
   }
 }
 
+/**
+ * Builds the overlay for confirming the deletion of an item.
+ * @param {number} index - The index of the item to delete.
+ */
 function buildItemDeleteOverlay(index) {
   if (globalDebug) { console.log("Delete overlay built"); }
   myMain.innerHTML = `<section class="deleteOverlay"><h2>Er du sikker på at du vil slette dette item?</h2><p>${myData.lists[currentList].items[index].name}</p><button class="okButton" onclick="deleteItemCallback(true,${index})">Ja</button><button class="cancelButton" onclick="deleteItemCallback(false,${index})">Nej</button></section>`; // Add the delete overlay to the main content
 }
 
+/**
+ * Handles the callback for deleting an item, either confirming or canceling the action.
+ * @param {boolean} myDeleteAction - Whether to delete the item or not.
+ * @param {number} index - The index of the item to delete.
+ */
 function deleteItemCallback(myDeleteAction, index) {
   if (globalDebug) { console.log("Delete item callback: " + index); }
   if (myDeleteAction) {
@@ -350,6 +415,10 @@ function deleteItemCallback(myDeleteAction, index) {
   BuildItemView(currentList);
 }
 
+/**
+ * Builds the edit view for an item, allowing the user to modify its details.
+ * @param {number} index - The index of the item to edit.
+ */
 function buildItemEditView(index) {
   if (globalDebug) { console.log("Item edit view built"); }
     ClearMain();
@@ -357,7 +426,7 @@ function buildItemEditView(index) {
     if (globalDebug) {console.log(myItem)};
 
     myState = "itemEditView";
-    myMain.innerHTML = `<section class="itemEditView"><h2>Rediger item</h2>
+    myMain.innerHTML = `<section class="overlayView"><h2>Rediger item</h2>
     <label for="itemName">navn:</label> 
     <input type="text" id="itemName" name="nameInput"  value="${myItem.name}">    
     <label for="itemDescriptionInput">beskrivelse:</label> 
@@ -365,6 +434,10 @@ function buildItemEditView(index) {
     // Add the item edit view to the main content
 }
 
+/**
+ * Edits an item in the current list and saves the changes to the data.
+ * @param {number} index - The index of the item to edit.
+ */
 function editItem(index) {
   if (globalDebug) { console.log("Item edited: " + index); }
   let myName= document.getElementById("itemName").value; // Get the name from the input field
@@ -378,11 +451,18 @@ myData.lists[currentList].items[index].description=myDescription; // Set the des
 
 
 // service functions --------------------------------------------------------------------------
+
+/**
+ * Builds the loader view, typically displayed during initialization or loading.
+ */
 function BuildLoader() {
   if (globalDebug) { console.log("Loader built"); }
   // Add any other loader building code here
 }
 
+/**
+ * Clears the main content area and removes any loader elements.
+ */
 function ClearMain() {
   if (globalDebug) { console.log("Loader removed"); }
   // Add any other loader removal code here
@@ -390,21 +470,30 @@ function ClearMain() {
   myMain.classList.remove("loader"); // Remove the loader class from the main element
 }
 
-// Model kode. gemmer data tilsendt i local storage
+/**
+ * Saves the to-do data to local storage.
+ * @param {Object} toDoData - The data to save.
+ */
 function SaveData(toDoData) {
   let mySerializedData = JSON.stringify(toDoData); //konverterer modtaget data til string
   localStorage.setItem("savedData", mySerializedData); // gemmer i localStorage
 }
 
-// læser data fra local storage og konverterer det til array og objekter
+/**
+ * Reads the to-do data from local storage.
+ * @returns {Object|null} The parsed data from local storage, or null if no data is found.
+ */
 function ReadData() {
   // læser data i local storage
   let myfoundData = localStorage.getItem("savedData");
   return JSON.parse(myfoundData); // konverterer det læste data til array og objekter og sender det tilbage til hvor funktionen er kaldt
 }
 
-// Progress SVG function to create a circular progress bar
-// This function takes a percentage value and returns an SVG string representing the progress bar
+/**
+ * Generates an SVG string representing a circular progress bar.
+ * @param {number} percentage - The percentage of progress to display.
+ * @returns {string} The SVG string for the progress bar.
+ */
 function ProgressSVG(percentage) {
   let myPercentage = 100.0 - percentage; // Calculate the percentage to be displayed
   let base = 565.48 * 0.01; // Calculate the base value for the stroke-dasharray
@@ -412,13 +501,18 @@ function ProgressSVG(percentage) {
   let mySvg = `<svg width="100" height="100" viewBox="-25 -25 250 250" version="1.1" xmlns="http://www.w3.org/2000/svg"">
   <circle r="90" cx="50%" cy="50%" fill="transparent" stroke="#e0e0e0" stroke-width="16px"></circle>
   <circle r="90" cx="50%" cy="50%" stroke="${completedColor}" stroke-width="16px" stroke-linecap="round" stroke-dashoffset="${offset}px" fill="transparent" stroke-dasharray="565.48px" style="transform-box: fill-box; transform-origin: center; transform: rotate(-90deg);" ></circle>
-<text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="${completedColor}" font-size="52px" font-weight="bold">${percentage}%</text>
+<text x="50%" y="52%" dominant-baseline="middle" text-anchor="middle" fill="${completedColor}" font-size="52px" font-weight="bold">${percentage}%</text>
 
 </svg>`;
 
   return mySvg;
 }
 
+/**
+ * Generates an SVG string representing a "done" or "not done" icon.
+ * @param {boolean} state - The state of the item (true for done, false for not done).
+ * @returns {string} The SVG string for the icon.
+ */
 function doneIcon(state) {
  
   if (state) {
@@ -428,6 +522,10 @@ function doneIcon(state) {
   }
 }
 
+/**
+ * Calculates the percentage of completed items in the current list.
+ * @returns {number} The percentage of completed items.
+ */
 function calculatePercentDone(){
     let myList = myData.lists[currentList]; // Get the current list from the data
     let myItems = myList.items; // Get the items from the current list
