@@ -2,12 +2,13 @@ let myData = null; // Declare myData variable globally
 const myMain = document.getElementById("mainContent"); // Select the main element
 let myState = "firstrun";
 let currentList = 0; // Declare currentList variable globally
+const globalDebug = false; // Set globalDebug to true for debugging purposes
 
 initApp(); // Call the initApp function to initialize the app
 
 function initApp() {
   // Initialize the app
-  console.log("App initialized");
+  if (globalDebug) { console.log("App initialized"); }
   // connect interface
   ConnectInterface();
 
@@ -38,7 +39,7 @@ function initApp() {
 }
 
 function ConnectInterface() {
-  console.log("Interface connected");
+  if (globalDebug) { console.log("Interface connected"); }
 
   let myNewButton = document.getElementById("newButton"); // Select the new button
  // let myDeleteButton = document.getElementById("deleteButton"); // Select the delete button
@@ -73,8 +74,7 @@ function ConnectInterface() {
 function BuildLanding() {
   ClearMain(); // Remove the loader before building the landing page
   myState = "listview";
-  // Build the header
-  console.log(myData);
+  if (globalDebug) { console.log(myData); }
 
   let myName = myData.Profile.name; // Get the name from the profile data
   let myProfileNameField = document.getElementById("nameField"); // Select the header element
@@ -87,8 +87,7 @@ function BuildLanding() {
 
   buildListView(myTodos); // Build the list view with the todos
 
-  console.log("Main content built");
-  // Add any other main content building code here
+  if (globalDebug) { console.log("Main content built"); }
 }
 
 function buildListView(myTodos) {
@@ -109,6 +108,7 @@ function buildListView(myTodos) {
       myDeleteButton.classList.add("deleteIcon"); // Add the deleteButton class to the button element
       myDeleteButton.src = "assets/img/delete.svg"; // Set the inner HTML of the button element to the delete icon
       myDeleteButton.addEventListener("click", function (event) {
+        if (globalDebug) { console.log("Delete button clicked for list index: " + index); }
         event.stopPropagation(); // Stop the click event from propagating to the parent element
         buildDeleteListOverlay(event, index); // Call the buildDeleteListOverlay function with the index of the list
       });
@@ -133,30 +133,31 @@ function buildListView(myTodos) {
 }
 
 function BuildProfileView() {
-  // Build the profile view
-  console.log("Profile view built");
+  if (globalDebug) { console.log("Profile view built"); }
   ClearMain();
   if (myState == "firstrun") {
-    myMain.innerHTML = `<section class="profileView"><h2>Profil</h2><p>Skriv dit navn for at fortsætte..</p> <label for="nameInput">dit navn:</label>
+    myMain.innerHTML = `<section class="profileView"><h2>Profil</h2><p>Skriv dit navn for at fortsætte..</p> 
+    <label for="profileNameInput">dit navn:</label> <!-- Fixed mismatch -->
     <input type="text" id="profileNameInput" name="nameInput" placeholder="indtast navn">
     <section id="profileButtons"><button onclick="ProfileCallBack('ok')">ok</button></section></section>`;
   } else {
-    myMain.innerHTML = `<section class="profileView"><h2>Profil</h2><p>Her kan du ændre dine oplysninger.</p> <label for="nameInput">dit navn:</label>
-        <input type="text" id="profileNameInput" name="nameInput" placeholder="indtast navn"><section id="profileButtons"><button class="okButton" onclick="ProfileCallBack('ok')">ok</button><button class="cancelButton" onclick="ProfileCallBack('cancel')">cancel</button></section></section>`;
+    myMain.innerHTML = `<section class="profileView"><h2>Profil</h2><p>Her kan du ændre dine oplysninger.</p> 
+    <label for="profileNameInput">dit navn:</label> <!-- Fixed mismatch -->
+    <input type="text" id="profileNameInput" name="nameInput" placeholder="indtast navn">
+    <section id="profileButtons"><button class="okButton" onclick="ProfileCallBack('ok')">ok</button>
+    <button class="cancelButton" onclick="ProfileCallBack('cancel')">cancel</button></section></section>`;
   }
   // Add the profile view to the main content
 }
 
 function ListViewCallBack(myListIndex) {
-  // Handle list view callback
-  console.log("List view callback: " + myListIndex);
+  if (globalDebug) { console.log("List view callback: " + myListIndex); }
   currentList = myListIndex; // Set the current list index
   BuildItemView(myListIndex); // Build the item view for the selected list
 }
 
 function FooterCallback(myAnswer) {
-  // Handle footer button clicks
-  console.log("Footer callback: " + myAnswer);
+  if (globalDebug) { console.log("Footer callback: " + myAnswer); }
   if (myAnswer == "new") {
     BuildnewOverlay();
   } else if (myAnswer == "delete") {
@@ -172,6 +173,7 @@ function FooterCallback(myAnswer) {
 }
 
 function ProfileCallBack(myAnswer) {
+  if (globalDebug) { console.log("Profile callback: " + myAnswer); }
   if (myAnswer == "ok") {
     myData.Profile.name = document.getElementById("profileNameInput").value;
     // Save the empty array to local storage
@@ -187,20 +189,28 @@ function ProfileCallBack(myAnswer) {
 
 
 function BuildnewOverlay() {
-  console.log("newOverlay built");
-  console.log(myState);
+  if (globalDebug) { console.log("newOverlay built"); }
+  if (globalDebug) { console.log(myState); }
 
   ClearMain();
   switch (myState) {
     case "itemView":
-      myMain.innerHTML = `<section class="newItemView"><h2>ny toDo</h2><p>giv dit item lidt liv.</p> <label for="nameInput">navn:</label>
-            <input type="text" id="itemName" name="nameInput" placeholder="indtast beskrivelse"><label for="descriptionInput">navn:</label>
-            <input type="text" id="itemDescriptionInput" name="nameInput" placeholder="beskrivelse"><button class="okButton" onclick="newItem('ok')">ok</button><button class="cancelButton" onclick="BuildItemView(${currentList})">cancel</button></section>`;
+      myMain.innerHTML = `<section class="newItemView"><h2>ny toDo</h2><p>giv dit item lidt liv.</p> 
+      <label for="itemName">navn:</label> <!-- Fixed mismatch -->
+      <input type="text" id="itemName" name="nameInput" placeholder="indtast beskrivelse">
+      <label for="itemDescriptionInput">beskrivelse:</label> <!-- Fixed mismatch -->
+      <input type="text" id="itemDescriptionInput" name="nameInput" placeholder="beskrivelse">
+      <button class="okButton" onclick="newItem('ok')">ok</button>
+      <button class="cancelButton" onclick="BuildItemView(${currentList})">cancel</button></section>`;
       break;
     case "listview":
-      myMain.innerHTML = `<section class="newListView"><h2>ny liste</h2><p>giv din liste liv.</p> <label for="nameInput">navn:</label>
-            <input type="text" id="listName" name="nameInput" placeholder="indtast navn"><label for="descriptionInput">navn:</label>
-            <input type="text" id="listDescriptionInput" name="description" placeholder="beskrivelse"><button class="okButton" onclick="newList()">ok</button><button class="cancelButton" onclick="BuildLanding()">cancel</button></section>`;
+      myMain.innerHTML = `<section class="newListView"><h2>ny liste</h2><p>giv din liste liv.</p> 
+      <label for="listName">navn:</label> <!-- Fixed mismatch -->
+      <input type="text" id="listName" name="nameInput" placeholder="indtast navn">
+      <label for="listDescriptionInput">beskrivelse:</label> <!-- Fixed mismatch -->
+      <input type="text" id="listDescriptionInput" name="description" placeholder="beskrivelse">
+      <button class="okButton" onclick="newList()">ok</button>
+      <button class="cancelButton" onclick="BuildLanding()">cancel</button></section>`;
       break;
 
     default:
@@ -227,14 +237,14 @@ function newList() {
 }
 
 function buildDeleteListOverlay(event, index) {
-  console.log(event);
+  if (globalDebug) { console.log(event); }
 
-  // Build the delete overlay
-  console.log("Delete overlay built");
+  if (globalDebug) { console.log("Delete overlay built"); }
   myMain.innerHTML = `<section class="deleteOverlay"><h4>Er du sikker på at du vil slette?</h4><h2>${myData.lists[index].name}</h2><button class="okButton" onclick="deleteList(${index})">Ja</button><button class="cancelButton" onclick="BuildLanding()">Nej</button></section>`; // Add the delete overlay to the main content
 }
 
 function deleteList(index) {
+  if (globalDebug) { console.log("List deleted: " + index); }
   myData.lists.splice(index, 1); // Remove the list from the data using splice
   SaveData(myData); // Save the data to local storage
   BuildLanding(); // Build the landing page again
@@ -243,7 +253,6 @@ function deleteList(index) {
 // items code -------------------------------------------------------------------------------
 
 function BuildItemView(index) {
-  // Build the footer
   ClearMain();
   myState = "itemView";
 
@@ -277,7 +286,7 @@ function BuildItemView(index) {
 }
 
 function toggleItem(index){
-   console.log("toggleItem: " + myData.lists[currentList].items[index].state);
+  if (globalDebug) { console.log("toggleItem: " + myData.lists[currentList].items[index].state); }
    if (myData.lists[currentList].items[index].state == 0) {
     myData.lists[currentList].items[index].state = 1; // Set the state to 1 if it is currently 0    
    }else{
@@ -317,12 +326,12 @@ function newItem(myAnsver) {
 }
 
 function buildItemDeleteOverlay(index) {
-  // Build the delete overlay
-  console.log("Delete overlay built");
+  if (globalDebug) { console.log("Delete overlay built"); }
   myMain.innerHTML = `<section class="deleteOverlay"><h2>Er du sikker på at du vil slette dette item?</h2><p>${myData.lists[currentList].items[index].name}</p><button class="okButton" onclick="deleteItemCallback(true,${index})">Ja</button><button class="cancelButton" onclick="deleteItemCallback(false,${index})">Nej</button></section>`; // Add the delete overlay to the main content
 }
 
 function deleteItemCallback(myDeleteAction, index) {
+  if (globalDebug) { console.log("Delete item callback: " + index); }
   if (myDeleteAction) {
     // Handle delete item callback
     console.log("Delete item callback: " + index);
@@ -339,20 +348,22 @@ function deleteItemCallback(myDeleteAction, index) {
 }
 
 function buildItemEditView(index) {
-    // Build the item edit view
-    console.log("Item edit view built");
+  if (globalDebug) { console.log("Item edit view built"); }
     ClearMain();
     let myItem=myData.lists[currentList].items[index]; // Get the item from the data using the index
-    console.log(myItem);
+    if (globalDebug) {console.log(myItem)};
 
     myState = "itemEditView";
-    myMain.innerHTML = `<section class="itemEditView"><h2>Rediger item</h2><p>Rediger dit item.</p> <label for="nameInput">navn:</label>
-    <input type="text" id="itemName" name="nameInput"  value="${myItem.name}"><label for="descriptionInput">navn:</label>    
-    <input type="text" id="itemDescriptionInput" name="itemDescriptionInput" value="${myItem.description}"><button class="okButton" onclick="editItem(${index})">ok</button><button class="cancelButton" onclick="BuildItemView(${currentList})">cancel</button></section>`;
+    myMain.innerHTML = `<section class="itemEditView"><h2>Rediger item</h2><p>Rediger dit item.</p> 
+    <label for="itemName">navn:</label> <!-- Fixed mismatch -->
+    <input type="text" id="itemName" name="nameInput"  value="${myItem.name}"><label for="descriptionInput">Description:</label>    
+    <label for="itemDescriptionInput">beskrivelse:</label> <!-- Fixed mismatch -->
+    <input type="text" id="itemDescriptionInput" name="descriptionInput" value="${myItem.description}"><button class="okButton" onclick="editItem(${index})">ok</button><button class="cancelButton" onclick="BuildItemView(${currentList})">cancel</button></section>`;
     // Add the item edit view to the main content
 }
 
 function editItem(index) {
+  if (globalDebug) { console.log("Item edited: " + index); }
   let myName= document.getElementById("itemName").value; // Get the name from the input field
   let myDescription= document.getElementById("itemDescriptionInput").value; // Get the description from the input field
 
@@ -365,14 +376,12 @@ myData.lists[currentList].items[index].description=myDescription; // Set the des
 
 // service functions --------------------------------------------------------------------------
 function BuildLoader() {
-  // Build the loader
-  console.log("Loader built");
+  if (globalDebug) { console.log("Loader built"); }
   // Add any other loader building code here
 }
 
 function ClearMain() {
-  // Remove the loader
-  console.log("Loader removed");
+  if (globalDebug) { console.log("Loader removed"); }
   // Add any other loader removal code here
   myMain.innerHTML = ""; // Clear the main content
   myMain.classList.remove("loader"); // Remove the loader class from the main element
@@ -397,32 +406,32 @@ function ProgressSVG(percentage) {
   let myPercentage = 100.0 - percentage; // Calculate the percentage to be displayed
   let base = 565.48 * 0.01; // Calculate the base value for the stroke-dasharray
   let offset = base * myPercentage; // Initialize offset variable
+  let mySvg = `<svg width="100" height="100" viewBox="-25 -25 250 250" version="1.1" xmlns="http://www.w3.org/2000/svg"">
+  <circle r="90" cx="50%" cy="50%" fill="transparent" stroke="#e0e0e0" stroke-width="16px"></circle>
+  <circle r="90" cx="50%" cy="50%" stroke="#76e5b1" stroke-width="16px" stroke-linecap="round" stroke-dashoffset="${offset}px" fill="transparent" stroke-dasharray="565.48px" style="transform-box: fill-box; transform-origin: center; transform: rotate(-90deg);" ></circle>
+<text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#6bdba7" font-size="52px" font-weight="bold">${percentage}%</text>
 
-  let mySvg = `<svg width="100" height="100" viewBox="-25 -25 250 250" version="1.1" xmlns="http://www.w3.org/2000/svg" style="transform:rotate(-90deg)">
-    <circle r="90" cx="100" cy="100" fill="transparent" stroke="#e0e0e0" stroke-width="16px"></circle>
-    <circle r="90" cx="100" cy="100" stroke="#76e5b1" stroke-width="16px" stroke-linecap="round" stroke-dashoffset="${offset}px" fill="transparent" stroke-dasharray="565.48px"></circle>
- <text x="73px" y="117px" dominant-baseline="middle" text-anchor="middle" fill="#6bdba7" font-size="52px" font-weight="bold" style="transform:rotate(90deg)  translate(40px, -210px)">${percentage}%</text>
-  
-  </svg>`;
+</svg>`;
+
   return mySvg;
 }
 
 function doneIcon(state) {
   if (state) {
-    return `<svg width="64" height="64" viewBox="0 0 24 24"  fill="none" xmlns="http://www.w3.org/2000/svg" ><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <circle cx="12" cy="12" r="8" fill="#52c2c3" fill-opacity="1"></circle> <path d="M8.5 11L10.7929 13.2929C11.1834 13.6834 11.8166 13.6834 12.2071 13.2929L19.5 6" stroke="#52c37d" stroke-width="1.2" stroke-linecap="round"></path> </g></svg>`;
+    return `<svg width="64" height="64" viewBox="0 0 24 24"  fill="none" xmlns="http://www.w3.org/2000/svg" ><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <circle cx="12" cy="12" r="8" fill="#daebed" fill-opacity="1"></circle> <path d="M8.5 11L10.7929 13.2929C11.1834 13.6834 11.8166 13.6834 12.2071 13.2929L19.5 6" stroke="#52c37d" stroke-width="2" stroke-linecap="round"></path> </g></svg>`;
   } else {
-    return `<svg width="64" height="64" viewBox="0 0 24 24"  fill="none" xmlns="http://www.w3.org/2000/svg" ><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <circle cx="12" cy="12" r="8" fill="#daebed" fill-opacity="1"></circle> <path d="M8.5 11L10.7929 13.2929C11.1834 13.6834 11.8166 13.6834 12.2071 13.2929L19.5 6" stroke="#222222" stroke-width="1.2" stroke-linecap="round"></path> </g></svg>`;
+    return `<svg width="64" height="64" viewBox="0 0 24 24"  fill="none" xmlns="http://www.w3.org/2000/svg" ><g id="SVGRepo_bgCarrier" stroke-width="1"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <circle cx="12" cy="12" r="8" fill="#daebed" fill-opacity="1"></circle> <path d="M8.5 11L10.7929 13.2929C11.1834 13.6834 11.8166 13.6834 12.2071 13.2929L19.5 6" stroke="#222222" stroke-width="1.2" stroke-linecap="round"></path> </g></svg>`;
   }
 }
 
 function calculatePercentDone(){
     let myList = myData.lists[currentList]; // Get the current list from the data
     let myItems = myList.items; // Get the items from the current list
-    console.log(myItems);
+    if(globalDebug){console.log(myItems)};
     
     let myDoneItems = myItems.filter((item) => item.state == 1); // Filter the items to get only the done items
     let myPercentDone = (myDoneItems.length / myItems.length) * 100; // Calculate the percentage of done items
-    console.log('percentage done: '+myPercentDone);
+    if (globalDebug) { console.log('percentage done: '+myPercentDone); }
     
     return Math.round(myPercentDone); // Return the rounded percentage value    
 }
