@@ -9,24 +9,42 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <title></title>
         <meta name="description" content="">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
         <link rel="stylesheet" href="assets/css/site.css"> 
          <script src="assets/js/app.js" defer></script>
     </head>
     <body>
      <header>
-      
-        <button id="profileButton">profile</button>
-        <h2 id="nameField">hej</h2>
-        <button id="inProgressButton">in progress</button>
+
+        <section id="headerTop">
+            <section id="headerInfo">
+               <h2 id="nameField">hej</h2> 
+               <span id="headerDescription">lists eller items</span>
+            </section>
+            
+            <!--    <img id="profileButton" src="assets/img/profile.svg" alt="profile"> -->
+        </section>
+
+        <section id="headerBottom">
+            <button id="allButton">all</button> 
+            <button id="doneButton">done</button> 
+           <button id="inProgressButton">in progress</button>  
+        </section>
+       
      </header>
+
 <main id="mainContent" class="loader">
 
 </main>
 <footer>
-    <button id="homeButton">home</button>
-    <button id="newButton">+</button>
-    <button id="deleteButton">delete</button>
+    
+    <img id="homeButton" src="assets/img/home.svg" alt="home">
+    <img id="newButton" src="assets/img/add.svg" alt="new">
+    <img id="profileButton" src="assets/img/profile.svg" alt="profile">
+   <!--  <img id="deleteButton" src="assets/img/delete.svg" alt="delete">
+    -->
 </footer>
+
+
     </body>
 </html>
